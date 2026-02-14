@@ -12,33 +12,24 @@
   --bg0:#07090c;
   --bg1:#0b0f14;
   --bg2:#0f1520;
-
   --panel: rgba(18, 23, 32, .78);
   --panel-strong: rgba(18, 23, 32, .92);
-
   --border: rgba(255,255,255,.10);
   --border2: rgba(255,255,255,.16);
-
   --text:#eaf0f7;
   --muted: rgba(234,240,247,.72);
-
   --accent:#b6ff01;
   --accent2:#88f000;
   --accent3:#22c55e;
-
   --shadow: 0 22px 60px rgba(0,0,0,.55);
   --shadow2: 0 14px 35px rgba(0,0,0,.40);
-
   --radius:22px;
   --radius2:16px;
-
   --ease: cubic-bezier(.2,.8,.2,1);
 }
 
 *{ box-sizing:border-box; margin:0; padding:0; font-family:'Roboto', sans-serif; }
-
 ::selection{ background: rgba(182,255,1,.25); }
-
 html, body{ height:100%; }
 
 body{
@@ -53,7 +44,6 @@ body{
   overflow-x:hidden;
 }
 
-/* fundo com "grain"/textura leve (mais profissional) */
 body::before{
   content:"";
   position:fixed;
@@ -67,7 +57,6 @@ body::before{
   transform: translateZ(0);
 }
 
-/* scrollbar */
 *::-webkit-scrollbar{ width:10px; height:10px; }
 *::-webkit-scrollbar-thumb{
   background: rgba(255,255,255,.14);
@@ -76,21 +65,15 @@ body::before{
 }
 *::-webkit-scrollbar-track{ background: rgba(0,0,0,.25); }
 
-/* ANIMAÇÕES */
 @keyframes fadeUp{
   from{ opacity:0; transform: translateY(14px); filter: blur(4px); }
   to{ opacity:1; transform: translateY(0); filter: blur(0); }
-}
-@keyframes glowPulse{
-  0%,100%{ box-shadow: 0 0 0 rgba(182,255,1,0); }
-  50%{ box-shadow: 0 0 22px rgba(182,255,1,.18); }
 }
 @keyframes gradientMove{
   0%{ background-position: 0% 50%; }
   100%{ background-position: 100% 50%; }
 }
 
-/* NAV */
 nav{
   max-width:1200px;
   margin:0 auto 28px;
@@ -98,19 +81,13 @@ nav{
   justify-content:space-between;
   align-items:center;
   padding:14px 10px;
-
   position:sticky;
   top:0;
   z-index:50;
-
   border:1px solid rgba(255,255,255,.10);
   border-radius: 18px;
-
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-
-  background:
-    linear-gradient(180deg, rgba(12,16,22,.78), rgba(12,16,22,.40));
+  background: linear-gradient(180deg, rgba(12,16,22,.78), rgba(12,16,22,.40));
   box-shadow: 0 10px 30px rgba(0,0,0,.35);
 }
 nav::after{
@@ -126,14 +103,11 @@ nav::after{
   display:flex;
   align-items:center;
   gap:10px;
-
   padding:10px 14px;
   border-radius: 14px;
-
   font-weight:900;
   letter-spacing:-.02em;
   color:#061006;
-
   background: linear-gradient(45deg, var(--accent), var(--accent2));
   box-shadow: 0 18px 45px rgba(182,255,1,.10);
   transition: transform .22s var(--ease), box-shadow .22s var(--ease);
@@ -143,7 +117,6 @@ nav::after{
   box-shadow: 0 22px 60px rgba(182,255,1,.14);
 }
 
-/* ÍCONES mais "pro" (consistência + badge) */
 .logo i{
   width:34px; height:34px;
   display:grid; place-items:center;
@@ -155,7 +128,6 @@ nav::after{
 
 .nav-buttons{ display:flex; gap:10px; }
 
-/* SECTIONS */
 .section-page{
   display:none;
   max-width:1200px;
@@ -190,27 +162,19 @@ h1::after{
   opacity:.85;
 }
 
-/* BOTÕES */
 .btn{
   border:none;
   border-radius: 999px;
   padding:12px 18px;
   font-weight:800;
   cursor:pointer;
-
   display:inline-flex;
   align-items:center;
   justify-content:center;
   gap:10px;
   text-decoration:none;
   user-select:none;
-
-  transition:
-    transform .18s var(--ease),
-    box-shadow .18s var(--ease),
-    filter .18s var(--ease),
-    background .18s var(--ease),
-    border-color .18s var(--ease);
+  transition: transform .18s var(--ease), box-shadow .18s var(--ease), filter .18s var(--ease), background .18s var(--ease), border-color .18s var(--ease);
   box-shadow: 0 12px 26px rgba(0,0,0,.25);
   position:relative;
   overflow:hidden;
@@ -223,22 +187,8 @@ h1::after{
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.12);
   font-size: 14px;
 }
-.btn::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background: radial-gradient(400px 80px at 0% 0%, rgba(255,255,255,.18), transparent 55%);
-  opacity:0;
-  transition: opacity .18s var(--ease);
-  pointer-events:none;
-}
 .btn:hover{ transform: translateY(-1px); box-shadow: var(--shadow2); }
-.btn:hover::before{ opacity:1; }
 .btn:active{ transform: translateY(0); box-shadow: 0 10px 22px rgba(0,0,0,.22); }
-.btn:focus-visible{
-  outline:2px solid rgba(182,255,1,.75);
-  outline-offset:3px;
-}
 
 .btn-primary{
   color:#061006;
@@ -258,32 +208,17 @@ h1::after{
   background: linear-gradient(45deg, #ffcc4a, #e39b00);
 }
 
-/* ADMIN PANEL */
 .admin-panel{
   max-width:720px;
   margin:26px auto 0;
   text-align:left;
-
   padding:34px;
   border-radius: calc(var(--radius) + 6px);
-
-  background:
-    linear-gradient(180deg, rgba(18,23,32,.85), rgba(12,16,22,.82));
+  background: linear-gradient(180deg, rgba(18,23,32,.85), rgba(12,16,22,.82));
   border:1px solid rgba(255,255,255,.10);
   box-shadow: var(--shadow);
   position:relative;
   overflow:hidden;
-}
-.admin-panel::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background:
-    radial-gradient(600px 160px at 10% 0%, rgba(182,255,1,.18), transparent 60%),
-    radial-gradient(700px 180px at 90%
-      0%, rgba(34,197,94,.12), transparent 62%);
-  opacity:.9;
-  pointer-events:none;
 }
 
 .form-group{ margin-bottom:18px; }
@@ -303,7 +238,6 @@ h1::after{
   color:var(--text);
   transition: border-color .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
 }
-.form-group input::placeholder{ color:rgba(234,240,247,.45); }
 .form-group input:focus{
   outline:none;
   border-color: rgba(182,255,1,.55);
@@ -311,7 +245,6 @@ h1::after{
   background: rgba(255,255,255,.06);
 }
 
-/* SEARCH */
 #searchInput{
   width:100% !important;
   padding:14px 16px !important;
@@ -321,9 +254,7 @@ h1::after{
   background: rgba(255,255,255,.04) !important;
   color:var(--text) !important;
   box-shadow: 0 10px 22px rgba(0,0,0,.20);
-  transition: border-color .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
 }
-#searchInput::placeholder{ color:rgba(234,240,247,.45) !important; }
 #searchInput:focus{
   outline:none !important;
   border-color: rgba(182,255,1,.55) !important;
@@ -331,7 +262,6 @@ h1::after{
   background: rgba(255,255,255,.06) !important;
 }
 
-/* GRID + CARDS */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -339,59 +269,37 @@ h1::after{
   align-items:stretch;
 }
 
-/* Cards padronizados, mais “premium” e animados */
 .card{
   background: linear-gradient(180deg, rgba(18,23,32,.86), rgba(12,16,22,.86));
   border:1px solid rgba(255,255,255,.10);
   border-radius: var(--radius);
   padding:18px;
   text-align:left;
-
   display:flex;
   flex-direction:column;
-
-  height: 570px; /* PADRÃO */
+  height: 570px;
   box-shadow: 0 14px 34px rgba(0,0,0,.38);
   transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-color .22s var(--ease);
   overflow:hidden;
   position:relative;
-}
-.card::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  background: radial-gradient(600px 220px at 20% 0%, rgba(182,255,1,.10), transparent 60%);
-  opacity:0;
-  transition: opacity .22s var(--ease);
-  pointer-events:none;
 }
 .card:hover{
   transform: translateY(-6px);
   box-shadow: var(--shadow);
   border-color: rgba(182,255,1,.22);
 }
-.card:hover::before{ opacity:1; }
 
-/* “quadro” da capa padronizado + efeito */
 .card img{
   width:100%;
   aspect-ratio: 3 / 4;
   height:auto;
-
-  object-fit: contain;         /* mantém a capa inteira */
-  background: rgba(0,0,0,.30); /* moldura */
+  object-fit: contain;
+  background: rgba(0,0,0,.30);
   border: 1px solid rgba(255,255,255,.10);
   border-radius: var(--radius2);
   padding: 10px;
-
   margin-bottom:14px;
-
   box-shadow: 0 10px 22px rgba(0,0,0,.28);
-  transition: transform .22s var(--ease), filter .22s var(--ease);
-}
-.card:hover img{
-  transform: scale(1.02);
-  filter: saturate(1.05) contrast(1.05);
 }
 
 .card h3{
@@ -399,8 +307,6 @@ h1::after{
   margin-bottom:6px;
   color:var(--text);
   font-weight:900;
-  letter-spacing:-.015em;
-
   display:-webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -411,7 +317,6 @@ h1::after{
 .card p{
   color:var(--muted);
   font-size:0.95rem;
-
   display:-webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -419,7 +324,6 @@ h1::after{
   min-height: 1.35em;
 }
 
-/* Botões no final, com consistência */
 .card-btns{
   display:flex;
   flex-direction:column;
@@ -428,7 +332,6 @@ h1::after{
 }
 .card-btns .btn{ width:100%; }
 
-/* MODAL (animação de abertura) */
 .modal{
   position:fixed;
   inset:0;
@@ -437,7 +340,6 @@ h1::after{
   justify-content:center;
   align-items:center;
   backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   z-index:100;
   padding:18px;
 }
@@ -471,7 +373,30 @@ h1::after{
   box-shadow: 0 0 0 4px rgba(182,255,1,.12);
 }
 
-/* RESPONSIVO */
+.upload-progress-container {
+  width:100%;
+  height:8px;
+  background:rgba(255,255,255,.1);
+  border-radius:999px;
+  margin:15px 0;
+  overflow:hidden;
+  display:none;
+}
+.upload-progress-bar {
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius:999px;
+  transition:width .3s var(--ease);
+}
+.upload-status {
+  text-align:center;
+  color:var(--muted);
+  font-size:0.9rem;
+  margin-top:10px;
+  display:none;
+}
+
 @media (max-width: 768px){
   body{ padding:16px; }
   nav{ padding:12px 8px; }
@@ -479,16 +404,6 @@ h1::after{
   .admin-panel{ padding:22px; }
   .grid{ grid-template-columns:1fr; }
   .card{ height: 590px; }
-}
-
-/* Acessibilidade: reduz animações se o usuário preferir */
-@media (prefers-reduced-motion: reduce){
-  *{
-    animation-duration:0.001ms !important;
-    animation-iteration-count:1 !important;
-    transition-duration:0.001ms !important;
-    scroll-behavior:auto !important;
-  }
 }
 </style>
 </head>
@@ -505,31 +420,39 @@ h1::after{
 <section id="adminPage" class="section-page active">
   <h1>Painel de Gerenciamento</h1>
   <div class="admin-panel">
-    <form id="uploadForm" enctype="multipart/form-data">
+    <form id="uploadForm">
       <div class="form-group">
         <label><i class="fas fa-book"></i> Nome do Livro</label>
-        <input type="text" id="bookName" name="bookName" required placeholder="Digite o nome do livro">
+        <input type="text" id="bookName" required placeholder="Digite o nome do livro">
       </div>
       <div class="form-group">
         <label><i class="fas fa-user"></i> Autor</label>
-        <input type="text" id="authorName" name="authorName" required placeholder="Digite o nome do autor">
+        <input type="text" id="authorName" required placeholder="Digite o nome do autor">
       </div>
       <div class="form-group">
         <label><i class="fas fa-image"></i> Capa (Imagem)</label>
-        <input type="file" id="coverFile" name="cover" accept="image/*" required>
+        <input type="file" id="coverFile" accept="image/*" required>
       </div>
       <div class="form-group">
         <label><i class="fas fa-file-alt"></i> Arquivo (.epub)</label>
-        <input type="file" id="epubFile" name="epub" accept=".epub" required>
+        <input type="file" id="epubFile" accept=".epub" required>
       </div>
-      <button type="submit" class="btn btn-primary" style="width:100%;"><i class="fas fa-cloud-upload-alt"></i> Iniciar Upload</button>
+      
+      <div class="upload-progress-container" id="progressContainer">
+        <div class="upload-progress-bar" id="progressBar"></div>
+      </div>
+      <div class="upload-status" id="uploadStatus">Iniciando upload...</div>
+      
+      <button type="submit" class="btn btn-primary" style="width:100%;" id="submitBtn">
+        <i class="fas fa-cloud-upload-alt"></i> Iniciar Upload
+      </button>
     </form>
   </div>
 </section>
 
 <section id="libraryPage" class="section-page">
   <h1>Biblioteca de Livros</h1>
-  <input type="text" id="searchInput" placeholder="Pesquisar por título ou autor..." style="width:100%;padding:15px;border-radius:25px;border:1px solid #444;margin-bottom:30px;background:#2a2a2a;color:#fff;">
+  <input type="text" id="searchInput" placeholder="Pesquisar por título ou autor...">
   <div class="grid" id="bookGrid"></div>
 </section>
 
@@ -546,6 +469,12 @@ h1::after{
 </div>
 
 <script>
+// ==========================================
+// CONFIGURAÇÕES - SUBSTITUA AQUI!
+// ==========================================
+const CLOUDINARY_CLOUD_NAME = 'didxi0uxa'; // Ex: 'meuapp'
+const CLOUDINARY_UPLOAD_PRESET = 'livros_unsigned'; // Seu preset
+
 const SERVER_URL = window.location.origin;
 let allBooks = [];
 let currentBookId = null;
@@ -558,29 +487,93 @@ function showPage(pageId){
 
 function capitalize(text){ return text.toLowerCase().replace(/\b\w/g,l=>l.toUpperCase()); }
 
+// Upload com progresso para Cloudinary
+async function uploadToCloudinary(file, folder, resourceType, onProgress) {
+  return new Promise((resolve, reject) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+    formData.append('folder', folder);
+    formData.append('resource_type', resourceType);
+
+    const xhr = new XMLHttpRequest();
+    
+    xhr.upload.addEventListener('progress', (e) => {
+      if (e.lengthComputable && onProgress) {
+        const percent = Math.round((e.loaded / e.total) * 100);
+        onProgress(percent);
+      }
+    });
+
+    xhr.addEventListener('load', () => {
+      if (xhr.status === 200) {
+        resolve(JSON.parse(xhr.responseText));
+      } else {
+        const error = JSON.parse(xhr.responseText);
+        reject(new Error(error.error?.message || 'Upload falhou'));
+      }
+    });
+
+    xhr.addEventListener('error', () => reject(new Error('Erro de rede')));
+    xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/${resourceType}/upload`);
+    xhr.send(formData);
+  });
+}
+
+function updateProgress(percent, text) {
+  document.getElementById('progressContainer').style.display = 'block';
+  document.getElementById('uploadStatus').style.display = 'block';
+  document.getElementById('progressBar').style.width = percent + '%';
+  document.getElementById('uploadStatus').textContent = text || `${percent}%`;
+}
+
+function hideProgress() {
+  document.getElementById('progressContainer').style.display = 'none';
+  document.getElementById('uploadStatus').style.display = 'none';
+  document.getElementById('progressBar').style.width = '0%';
+}
+
+function setLoading(isLoading) {
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = isLoading;
+  btn.innerHTML = isLoading ? 
+    '<i class="fas fa-spinner fa-spin"></i> Enviando...' : 
+    '<i class="fas fa-cloud-upload-alt"></i> Iniciar Upload';
+}
+
 async function loadBooks(){
   try{
     const res = await fetch(`${SERVER_URL}/livros`);
     allBooks = await res.json();
     displayBooks(allBooks);
-  }catch(e){ console.error(e); alert("Erro ao carregar livros."); }
+  }catch(e){ 
+    console.error(e); 
+    alert("Erro ao carregar livros."); 
+  }
 }
 
 function displayBooks(books){
-  const grid=document.getElementById("bookGrid");
-  grid.innerHTML=books.length?"":"<p style='grid-column:1/-1;color:#aaa;'>Nenhum livro encontrado.</p>";
-  books.forEach(book=>{
-    const card=document.createElement("div");
-    card.className="card";
-    card.innerHTML=`
-      <img src="${book.coverUrl}" alt="Capa de ${book.bookName}">
+  const grid = document.getElementById("bookGrid");
+  grid.innerHTML = books.length ? "" : "<p style='grid-column:1/-1;color:#aaa;'>Nenhum livro encontrado.</p>";
+  
+  books.forEach(book => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <img src="${book.coverUrl}" alt="Capa de ${book.bookName}" loading="lazy" onerror="this.src='https://via.placeholder.com/300x400?text=Sem+Capa'">
       <h3>${capitalize(book.bookName)}</h3>
       <p>${capitalize(book.authorName)}</p>
       <div class="card-btns">
-        <a href="${book.epubUrl}" target="_blank" class="btn btn-primary"><i class="fas fa-download"></i> Baixar</a>
+        <a href="${book.epubUrl}" target="_blank" class="btn btn-primary" download>
+          <i class="fas fa-download"></i> Baixar EPUB
+        </a>
         <div style="display:flex;gap:8px;">
-          <button class="btn btn-edit" style="flex:1" onclick="openEdit('${book._id}','${book.bookName}','${book.authorName}')"><i class="fas fa-edit"></i></button>
-          <button class="btn btn-danger" style="flex:1" onclick="deleteBook('${book._id}')"><i class="fas fa-trash"></i></button>
+          <button class="btn btn-edit" style="flex:1" onclick="openEdit('${book._id}','${book.bookName}','${book.authorName}')">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="btn btn-danger" style="flex:1" onclick="deleteBook('${book._id}')">
+            <i class="fas fa-trash"></i>
+          </button>
         </div>
       </div>
     `;
@@ -588,54 +581,140 @@ function displayBooks(books){
   });
 }
 
-document.getElementById("uploadForm").addEventListener("submit", async (e)=>{
+// UPLOAD PRINCIPAL - DIRETO PARA CLOUDINARY
+document.getElementById("uploadForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const formData=new FormData();
-  formData.append("bookName",document.getElementById("bookName").value.trim());
-  formData.append("authorName",document.getElementById("authorName").value.trim());
-  formData.append("cover",document.getElementById("coverFile").files[0]);
-  formData.append("epub",document.getElementById("epubFile").files[0]);
+  
+  const bookName = document.getElementById("bookName").value.trim();
+  const authorName = document.getElementById("authorName").value.trim();
+  const coverFile = document.getElementById("coverFile").files[0];
+  const epubFile = document.getElementById("epubFile").files[0];
 
-  try{
-    const res = await fetch(`${SERVER_URL}/upload`,{method:"POST",body:formData});
-    if(res.ok){ alert("Livro adicionado!"); document.getElementById("uploadForm").reset(); showPage('libraryPage'); }
-    else alert("Erro ao enviar livro.");
-  }catch(e){ console.error(e); alert("Erro de rede."); }
+  if (!bookName || !authorName || !coverFile || !epubFile) {
+    alert("Preencha todos os campos!");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    // 1. Upload da capa (0-50%)
+    updateProgress(0, "Enviando capa...");
+    const capaUpload = await uploadToCloudinary(
+      coverFile, 
+      "mvscan/capas", 
+      "image",
+      (pct) => updateProgress(pct * 0.5, `Capa: ${pct}%`)
+    );
+
+    // 2. Upload do EPUB (50-100%)
+    updateProgress(50, "Enviando EPUB...");
+    const epubUpload = await uploadToCloudinary(
+      epubFile, 
+      "mvscan/epubs", 
+      "raw",
+      (pct) => updateProgress(50 + (pct * 0.5), `EPUB: ${pct}%`)
+    );
+
+    // 3. Salvar metadados no servidor
+    updateProgress(100, "Salvando...");
+    
+    const metadata = {
+      bookName,
+      authorName,
+      coverUrl: capaUpload.secure_url,
+      coverId: capaUpload.public_id,
+      epubUrl: epubUpload.secure_url,
+      epubId: epubUpload.public_id
+    };
+
+    const res = await fetch(`${SERVER_URL}/livros`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(metadata)
+    });
+
+    if (!res.ok) throw new Error("Erro ao salvar no servidor");
+
+    alert("✅ Livro adicionado!");
+    document.getElementById("uploadForm").reset();
+    hideProgress();
+    showPage('libraryPage');
+    
+  } catch (err) {
+    console.error("Erro:", err);
+    alert("❌ Erro: " + err.message);
+    hideProgress();
+  } finally {
+    setLoading(false);
+  }
 });
 
-document.getElementById("searchInput").addEventListener("input",function(){
-  const term=this.value.toLowerCase();
-  displayBooks(allBooks.filter(b=>b.bookName.toLowerCase().includes(term)||b.authorName.toLowerCase().includes(term)));
+// Pesquisa
+document.getElementById("searchInput").addEventListener("input", function(){
+  const term = this.value.toLowerCase();
+  displayBooks(allBooks.filter(b => 
+    b.bookName.toLowerCase().includes(term) || 
+    b.authorName.toLowerCase().includes(term)
+  ));
 });
 
+// Deletar
 async function deleteBook(id){
-  if(!confirm("Remover este livro permanentemente?")) return;
+  if(!confirm("Remover este livro?")) return;
   try{
-    const res = await fetch(`${SERVER_URL}/delete/${id}`,{method:"DELETE"});
+    const res = await fetch(`${SERVER_URL}/delete/${id}`, {method:"DELETE"});
     if(res.ok) loadBooks();
-    else alert("Erro ao deletar livro.");
-  }catch(e){ console.error(e); alert("Erro ao deletar livro."); }
+    else alert("Erro ao deletar.");
+  }catch(e){ 
+    alert("Erro ao deletar."); 
+  }
 }
 
-function openEdit(id,name,author){
-  currentBookId=id;
-  document.getElementById("editName").value=name;
-  document.getElementById("editAuthor").value=author;
-  document.getElementById("editModal").style.display="flex";
+// Editar
+function openEdit(id, name, author){
+  currentBookId = id;
+  document.getElementById("editName").value = name;
+  document.getElementById("editAuthor").value = author;
+  document.getElementById("editModal").style.display = "flex";
 }
-function closeModal(){ document.getElementById("editModal").style.display="none"; }
+
+function closeModal(){ 
+  document.getElementById("editModal").style.display = "none"; 
+}
 
 async function saveEdit(){
-  const newName=document.getElementById("editName").value.trim();
-  const newAuthor=document.getElementById("editAuthor").value.trim();
-  if(!newName||!newAuthor){ alert("Preencha todos os campos."); return; }
+  const newName = document.getElementById("editName").value.trim();
+  const newAuthor = document.getElementById("editAuthor").value.trim();
+  
+  if(!newName || !newAuthor){ 
+    alert("Preencha todos os campos."); 
+    return; 
+  }
+  
   try{
-    const res=await fetch(`${SERVER_URL}/edit/${currentBookId}`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify({bookName:newName,authorName:newAuthor})});
-    if(res.ok){ closeModal(); loadBooks(); }
-    else alert("Erro ao editar livro.");
-  }catch(e){ console.error(e); alert("Erro ao editar livro."); }
+    const res = await fetch(`${SERVER_URL}/edit/${currentBookId}`, {
+      method: "PUT",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({bookName: newName, authorName: newAuthor})
+    });
+    
+    if(res.ok){ 
+      closeModal(); 
+      loadBooks(); 
+    } else {
+      alert("Erro ao editar.");
+    }
+  }catch(e){ 
+    alert("Erro ao editar."); 
+  }
 }
 
+document.getElementById("editModal").addEventListener("click", (e) => {
+  if (e.target.id === "editModal") closeModal();
+});
+
+// Iniciar
 loadBooks();
 </script>
 </body>

@@ -3,8 +3,8 @@ const router = express.Router();
 const multer = require("multer");
 const streamifier = require("streamifier");
 const basicAuth = require("express-basic-auth");
-const Livro = require("./models/Livro");           // ✅ CORRIGIDO: ./models
-const cloudinary = require("./config/cloudinary"); // ✅ CORRIGIDO: ./config
+const Livro = require("../models/Livro");           // ✅ ../ sobe um nível
+const cloudinary = require("../config/cloudinary"); // ✅ ../ sobe um nível
 
 // ========== MULTER MEMÓRIA ==========
 const storage = multer.memoryStorage();
