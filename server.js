@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const mongoose = require("mongoose");
+const multer = require("multer"); // para upload de arquivos
 
 const livrosRoute = require("./routes/livros");
 const auth = require("./middleware/auth"); // middleware de autenticação
@@ -16,14 +17,33 @@ app.use(express.urlencoded({ extended: true }));
 // 🔹 API para o app (não protegida)
 app.use("/livros", livrosRoute);
 
+// 🔹 Configuração do multer (upload de livros)
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/"); // salva na pasta uploads
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname); // evita conflitos
+  }
+});
+const upload = multer({ storage });
+
+// 🔹 Rota de upload de livros – protegida
+app.post("/upload", auth, upload.single("file"), (req, res) => {
+  if (!req.file) return res.status(400).send("Nenhum arquivo enviado");
+  res.send("Arquivo enviado com sucesso!");
+});
+
 // 🔹 Página index (upload de livros) – protegida
 app.get("/", auth, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // 🔹 Servir arquivos estáticos (CSS, JS, imagens)
-// Importante: o app pode acessar arquivos de livros que você upou
 app.use("/public", express.static(path.join(__dirname, "public")));
+
+// 🔹 Servir arquivos enviados (livros) – pode ser acessado pelo app
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const PORT = process.env.PORT || 3000;
 
