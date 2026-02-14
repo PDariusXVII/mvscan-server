@@ -6,23 +6,62 @@ require('./config/database');   // Conecta ao MongoDB
 const express = require('express');
 const Livro = require('./models/Livro');
 const uploadRouter = require('./routes/upload'); // router de upload
-const basicAuth = require('express-basic-auth');
 
 const app = express();
 app.use(express.json());
 
 // ================= ROTAS =================
 
-// Rotas de upload
-app.use('/api/upload', uploadRouter);
+// Rotas de upload (sem /api para compatibilidade com frontend)
+app.use('/upload', uploadRouter);
 
-// Listar todos os livros (público)
-app.get('/api/livros', async (req, res) => {
+// Listar todos os livros (público) - rota compatível com frontend
+app.get('/livros', async (req, res) => {
   try {
     const livros = await Livro.find().sort({ createdAt: -1 });
     res.json(livros);
   } catch (error) {
     console.error("Erro ao listar livros:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota de deletar compatível com frontend
+app.delete('/delete/:id', async (req, res) => {
+  try {
+    const livro = await Livro.findById(req.params.id);
+    if (!livro) return res.status(404).json({ error: 'Livro não encontrado' });
+    
+    // Deletar do Cloudinary se existir
+    try {
+      const cloudinary = require('./config/cloudinary');
+      if (livro.coverId) await cloudinary.uploader.destroy(livro.coverId);
+      if (livro.epubId) await cloudinary.uploader.destroy(livro.epubId, { resource_type: "raw" });
+    } catch (cloudErr) {
+      console.log("Erro ao deletar do Cloudinary (pode não existir):", cloudErr.message);
+    }
+    
+    await Livro.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Livro removido' });
+  } catch (error) {
+    console.error("Erro ao deletar livro:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Rota de editar compatível com frontend
+app.put('/edit/:id', async (req, res) => {
+  try {
+    const { bookName, authorName } = req.body;
+    const livro = await Livro.findByIdAndUpdate(
+      req.params.id,
+      { bookName, authorName },
+      { new: true }
+    );
+    if (!livro) return res.status(404).json({ error: 'Livro não encontrado' });
+    res.json(livro);
+  } catch (error) {
+    console.error("Erro ao editar livro:", error);
     res.status(500).json({ error: error.message });
   }
 });
