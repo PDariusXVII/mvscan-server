@@ -1,44 +1,60 @@
 require("dotenv").config();
 const express = require("express");
-const cors = require("cors");
-const path = require("path");
-const fs = require("fs");
 const mongoose = require("mongoose");
 const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
+const path = require("path");
 
-const auth = require("./middleware/auth");
 const Livro = require("./models/Livro");
+const auth = require("./middleware/auth");
 
 const app = express();
 
-// --- GARANTIR QUE PASTA UPLOADS EXISTE ---
-const uploadsDir = path.join(__dirname, "uploads");
-if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir);
+// --- CONFIGURAÇÃO CLOUDINARY ---
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // --- MIDDLEWARE ---
-app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/public", express.static(path.join(__dirname, "public")));
 
-// --- MULTER CONFIGURAÇÃO ---
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadsDir),
-  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname)
-});
+// --- MULTER EM MEMÓRIA ---
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// --- API PÚBLICA PARA APP ANDROID ---
+// --- FUNÇÃO AUXILIAR PARA UPLOAD CLOUDINARY ---
+async function uploadToCloudinary(buffer, folder, resource_type = "image") {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder, resource_type },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+    streamifier.createReadStream(buffer).pipe(stream);
+  });
+}
+
+// --- ROTAS ---
+
+// Listar livros
 app.get("/livros", async (req, res) => {
   try {
     const livros = await Livro.find().sort({ createdAt: -1 });
     res.json(livros);
   } catch (err) {
-    console.error("Erro ao listar livros:", err);
+    console.error(err);
     res.status(500).json({ error: "Erro ao listar livros" });
   }
 });
 
-// --- UPLOAD DE LIVROS (PAINEL WEB) ---
+// Upload de livro
 app.post("/upload", auth, upload.fields([
   { name: "cover", maxCount: 1 },
   { name: "epub", maxCount: 1 }
@@ -46,60 +62,73 @@ app.post("/upload", auth, upload.fields([
   try {
     const { bookName, authorName } = req.body;
     if (!bookName || !authorName) return res.status(400).send("Preencha todos os campos");
+    if (!req.files?.cover?.[0] || !req.files?.epub?.[0]) return res.status(400).send("Nenhum arquivo enviado");
 
-    if (!req.files?.cover?.[0] || !req.files?.epub?.[0])
-      return res.status(400).send("Nenhum arquivo enviado");
+    // Upload capa
+    const coverResult = await uploadToCloudinary(req.files.cover[0].buffer, "mvscan/capas");
 
-    const novoLivro = new Livro({
+    // Upload epub
+    const epubResult = await uploadToCloudinary(req.files.epub[0].buffer, "mvscan/epubs", "raw");
+
+    const novoLivro = await Livro.create({
       bookName,
       authorName,
-      cover: req.files.cover[0].filename,
-      epub: req.files.epub[0].filename
+      coverUrl: coverResult.secure_url,
+      coverId: coverResult.public_id,
+      epubUrl: epubResult.secure_url,
+      epubId: epubResult.public_id
     });
-    await novoLivro.save();
-    res.send("Livro enviado com sucesso!");
+
+    res.json(novoLivro);
   } catch (err) {
-    console.error("Erro no upload:", err);
-    res.status(500).send("Erro ao enviar. Tente novamente.");
+    console.error(err);
+    res.status(500).send("Erro ao enviar livro");
   }
 });
 
-// --- EDITAR LIVRO (PAINEL WEB) ---
+// Editar livro
 app.put("/edit/:id", auth, async (req, res) => {
   try {
     const { bookName, authorName } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return res.status(400).send("ID inválido");
+
     await Livro.findByIdAndUpdate(req.params.id, { bookName, authorName });
-    res.send("Livro atualizado com sucesso!");
+    res.json({ message: "Livro atualizado com sucesso" });
   } catch (err) {
-    console.error("Erro ao editar livro:", err);
+    console.error(err);
     res.status(500).send("Erro ao editar livro");
   }
 });
 
-// --- DELETAR LIVRO (PAINEL WEB) ---
+// Deletar livro
 app.delete("/delete/:id", auth, async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) return res.status(400).send("ID inválido");
+
+    const livro = await Livro.findById(req.params.id);
+    if (!livro) return res.status(404).send("Livro não encontrado");
+
+    // Deletar arquivos do Cloudinary
+    await cloudinary.uploader.destroy(livro.coverId);
+    await cloudinary.uploader.destroy(livro.epubId, { resource_type: "raw" });
+
+    // Deletar do MongoDB
     await Livro.findByIdAndDelete(req.params.id);
-    res.send("Livro removido com sucesso!");
+
+    res.json({ message: "Livro removido com sucesso" });
   } catch (err) {
-    console.error("Erro ao deletar livro:", err);
+    console.error(err);
     res.status(500).send("Erro ao deletar livro");
   }
 });
 
-// --- PAINEL WEB PROTEGIDO ---
+// Painel web
 app.get("/", auth, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// --- ARQUIVOS ESTÁTICOS ---
-app.use("/public", express.static(path.join(__dirname, "public")));
-app.use("/uploads", express.static(uploadsDir));
-
-// --- CONFIGURAÇÃO DO SERVIDOR ---
-const PORT = process.env.PORT || 3000;
-
 // --- CONEXÃO COM MONGODB ---
+const PORT = process.env.PORT || 3000;
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB conectado com sucesso!");
