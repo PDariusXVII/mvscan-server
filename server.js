@@ -5,6 +5,7 @@ const path = require("path");
 const mongoose = require("mongoose");
 
 const livrosRoute = require("./routes/livros");
+const auth = require("./middleware/auth"); // <- import do middleware
 
 const app = express();
 
@@ -12,15 +13,21 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Servir frontend
-app.use(express.static(path.join(__dirname, "public")));
-
-// API
-app.use("/livros", livrosRoute);
-
-app.get("/", (req, res) => {
+// 🔹 SERVIR FRONTEND (PÁGINAS WEB PROTEGIDAS)
+app.get("/", auth, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
+
+// Se tiver outras páginas web administrativas, use:
+// app.get("/admin", auth, (req, res) => { ... });
+
+// 🔹 API (ACESSO DO APP - NÃO PROTEGIDO)
+app.use("/livros", livrosRoute);
+
+// 🔹 SERVIR ARQUIVOS ESTÁTICOS (CSS, JS, Imagens) - se quiser proteger:
+// app.use("/public", auth, express.static(path.join(__dirname, "public")));
+// Ou deixar público para o app:
+// app.use(express.static(path.join(__dirname, "public")));
 
 const PORT = process.env.PORT || 3000;
 
