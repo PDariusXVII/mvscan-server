@@ -2,8 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
-
-require("./config/database");
+const mongoose = require("mongoose");
 
 const livrosRoute = require("./routes/livros");
 
@@ -25,6 +24,17 @@ app.get("/", (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log("Servidor rodando na porta " + PORT);
-});
+// 🔥 CONEXÃO COM MONGODB + START DO SERVIDOR
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("✅ MongoDB conectado com sucesso!");
+
+    app.listen(PORT, () => {
+      console.log("🚀 Servidor rodando na porta " + PORT);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ Erro ao conectar no MongoDB:");
+    console.error(err);
+  });
